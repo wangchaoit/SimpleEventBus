@@ -40,7 +40,9 @@ namespace App
         public int Id { get; set; }
         public string Name { get; set; }
     }
-
+    /// <summary>
+    /// 带返回参数的事件处理程序
+    /// </summary>
     public class UserQueryHandler : IRequestHandler<UserQueryRequest, UserQueryResponse>
     {
         public Task<UserQueryResponse> HandleAsync(UserQueryRequest request)
@@ -55,7 +57,9 @@ namespace App
         public int Id { get; set; } = 0;
     }
 
-
+    /// <summary>
+    /// 不带返回参数的事件处理程序
+    /// </summary>
     public class NoResponseRequestHandler : IRequestHandler<NoResponseRequest>
     {
         public Task HandleAsync(NoResponseRequest request)
@@ -64,8 +68,11 @@ namespace App
             return Task.CompletedTask;
         }
     }
-
-    public class NoResponseRequestHandler1 : IRequestHandler<NoResponseRequest>
+    /// <summary>
+    /// 不带返回参数的事件处理程序；
+    /// Publish 时 NoResponseRequestHandler， MultipleHandler 均会响应并执行 HandleAsync
+    /// </summary>
+    public class MultipleHandler : IRequestHandler<NoResponseRequest>
     {
         public Task HandleAsync(NoResponseRequest request)
         {
