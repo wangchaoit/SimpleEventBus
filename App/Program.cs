@@ -15,13 +15,13 @@ namespace App
 
             var eventBus = host.Services.GetRequiredService<ISimpleEventBus>();
 
-            // 发送一个带响应的消息
+            // 发送一个带返回参数的消息
             var ret = await eventBus.Send<UserQueryRequest, UserQueryResponse>(new UserQueryRequest { Id = 0, Name = "zhangsan" });
 
-            // 发送一个不带响应的消息
+            // 发送一个不带返回参数的消息
             await eventBus.Send(new NoResponseRequest { Id = 1 });
 
-            // 发布一个消息可以被多个处理函数处理
+            // 发布一个消息可以被多个处理函数处理，无法携带返回参数
             await eventBus.Publish(new NoResponseRequest { Id = 2 });
 
             await host.RunAsync();
