@@ -2,25 +2,26 @@
 using Microsoft.Extensions.Hosting;
 using SimpleEventBus;
 
-namespace demo
+namespace App
 {
     internal class Program
     {
         static async Task Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder(args)
-                .ConfigureServices(service =>
-                {
-                    service.AddSimpleEventBus();
-                })
+                // 注入容器
+                .ConfigureServices(service => service.AddSimpleEventBus())
                 .Build();
 
             var eventBus = host.Services.GetRequiredService<ISimpleEventBus>();
 
+            // 发送一个带响应的消息
             var ret = await eventBus.Send<UserQueryRequest, UserQueryResponse>(new UserQueryRequest { Id = 0, Name = "zhangsan" });
 
+            // 发送一个不带响应的消息
             await eventBus.Send(new NoResponseRequest { Id = 1 });
 
+            // 发布一个消息可以被多个处理函数处理
             await eventBus.Publish(new NoResponseRequest { Id = 2 });
 
             await host.RunAsync();
@@ -44,6 +45,7 @@ namespace demo
     {
         public Task<UserQueryResponse> HandleAsync(UserQueryRequest request)
         {
+            // todo 业务逻辑的处理
             return Task.FromResult(new UserQueryResponse { CreateTime = DateTime.UtcNow, Id = request.Id, Name = request.Name });
         }
     }
@@ -58,6 +60,7 @@ namespace demo
     {
         public Task HandleAsync(NoResponseRequest request)
         {
+            // todo 业务逻辑的处理
             return Task.CompletedTask;
         }
     }
@@ -66,6 +69,7 @@ namespace demo
     {
         public Task HandleAsync(NoResponseRequest request)
         {
+            // todo 业务逻辑的处理
             return Task.CompletedTask;
         }
     }
