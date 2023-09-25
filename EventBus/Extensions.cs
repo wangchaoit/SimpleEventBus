@@ -18,7 +18,7 @@ namespace SimpleEventBus
             foreach (var handler in eventHandlers)
             {
                 var interfaces = handler.GetInterfaces();
-
+                // 根据自己的应用场景，这里需要调整
                 services.AddTransient(handler.GetInterfaces()[0], handler);
             }
             services.AddSingleton<ISimpleEventBus, SimpleEventBus>();
