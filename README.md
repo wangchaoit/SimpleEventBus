@@ -8,7 +8,7 @@
 
 #### 1. 将 SimpleEventBus 注入到容器
 ```csharp
-service.AddSimpleEventBus();
+services.AddSimpleEventBus();
 ```
 #### 2. 定义消息
 ```csharp
@@ -20,7 +20,7 @@ public class OrderMessage : IRequest<string>
 ```
 #### 3. 定义消息处理类(带返回参数)
 ```csharp
-public class RequestHandler ： IRequest<OrderMessage>
+public class RequestHandler : IRequest<OrderMessage>
 {
 	private readonly ILogger<RequestHandler> _logger;
 	public RequestHandler(ILogger<RequestHandler> logger) 
@@ -31,13 +31,13 @@ public class RequestHandler ： IRequest<OrderMessage>
 	public Task<string> HandleAsync(OrderMessage request)
 	{
 		// todo 业务逻辑的处理
-		return Task.FromResult(new UserQueryResponse { CreateTime = DateTime.UtcNow, Id = request.Id, Name = request.Name });
+		return Task.FromResult(request.OrderId);
 	}
 }
 ```
 #### 4. 定义消息处理类(不带返回参数)
 ```csharp
-public class RequestHandler ： IRequest
+public class RequestHandler : IRequest
 {
 	private readonly ILogger<RequestHandler> _logger;
 	public RequestHandler(ILogger<RequestHandler> logger) 
@@ -45,7 +45,7 @@ public class RequestHandler ： IRequest
 		_logger = logger;
 	}
 
-	public Task HandleAsync(OrderMessage request)
+	public Task HandleAsync(SomeRequest request)
 	{
 		// todo 业务逻辑的处理
 		return Task.CompleteTask;
@@ -62,7 +62,7 @@ public class RequestHandler : INotify
 		_logger = logger;
 	}
 
-	public Task HandleAsync(OrderMessage request)
+	public Task HandleAsync(SomeRequest request)
 	{
 		// todo 业务逻辑的处理
 		return Task.CompleteTask;
