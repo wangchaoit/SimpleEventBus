@@ -6,11 +6,11 @@
  
 ### 使用方式
 
-1. 将 SimpleEventBus 注入到容器
+#### 1. 将 SimpleEventBus 注入到容器
 ```csharp
 service.AddSimpleEventBus();
 ```
-2. 定义消息
+#### 2. 定义消息
 ```csharp
 // 带返回参数的消息定义
 public class OrderMessage : IRequest<string>
@@ -18,7 +18,7 @@ public class OrderMessage : IRequest<string>
 	public int OrderId { get; set; }
 }
 ```
-3. 定义消息处理类(带返回参数)
+#### 3. 定义消息处理类(带返回参数)
 ```csharp
 public class RequestHandler ： IRequest<OrderMessage>
 {
@@ -35,7 +35,7 @@ public class RequestHandler ： IRequest<OrderMessage>
 	}
 }
 ```
-4. 定义消息处理类(不带返回参数)
+#### 4. 定义消息处理类(不带返回参数)
 ```csharp
 public class RequestHandler ： IRequest
 {
@@ -52,9 +52,9 @@ public class RequestHandler ： IRequest
 	}
 }
 ```
-5. 定义消息处理类(多个处理程序)
+#### 5. 定义消息处理类(多个处理程序)
 ```csharp
-public class RequestHandler ： INotify
+public class RequestHandler : INotify
 {
 	private readonly ILogger<RequestHandler> _logger;
 	public RequestHandler(ILogger<RequestHandler> logger) 
@@ -69,11 +69,11 @@ public class RequestHandler ： INotify
 	}
 }
 ```
-6. 从容器中获取 SimpleEventBus 对象
+#### 6. 从容器中获取 SimpleEventBus 对象
 ```csharp
 var eventBus = provider.GetRequiredService<ISimpleEventBus>();
 ```
-7. 调用并发送/发布消息
+#### 7. 调用并发送/发布消息
 a. 发送一条带返回数据的消息
 ```csharp
 eventBus.Send<TIn, TOut>(TInObject)
